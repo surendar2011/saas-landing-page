@@ -1,23 +1,29 @@
 'use client';
 
+// Import React hooks and Framer Motion components
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 
 export default function DynamicIslandNavbar() {
+  // State to determine if the page has been scrolled
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Effect hook to listen for scroll events and update isScrolled accordingly
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
+    // Cleanup the event listener on component unmount
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
+    // Navbar container, fixed and centered at the top
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
       <LayoutGroup>
+        {/* Main navigation bar with animated padding based on scroll state */}
         <motion.div
           layout
           className="bg-black rounded-full flex items-center shadow-lg backdrop-blur-sm"
@@ -39,7 +45,7 @@ export default function DynamicIslandNavbar() {
             },
           }}
         >
-          {/* Logo */}
+          {/* Logo block */}
           <motion.div
             layout
             className="flex-shrink-0"
@@ -50,7 +56,7 @@ export default function DynamicIslandNavbar() {
             </div>
           </motion.div>
 
-          {/* Navigation Links - Animated */}
+          {/* Animated Navigation Links block, shown only when scrolled */}
           <AnimatePresence mode="popLayout">
             {isScrolled && (
               <motion.div
@@ -71,18 +77,21 @@ export default function DynamicIslandNavbar() {
                 }}
                 className="overflow-hidden flex items-center gap-6 ml-4"
               >
+                {/* Features link */}
                 <a
                   href="#features"
                   className="text-white text-sm font-medium hover:text-gray-300 transition-colors whitespace-nowrap"
                 >
                   Features
                 </a>
+                {/* Pricing link */}
                 <a
                   href="#pricing"
                   className="text-white text-sm font-medium hover:text-gray-300 transition-colors whitespace-nowrap"
                 >
                   Pricing
                 </a>
+                {/* Docs link */}
                 <a
                   href="#docs"
                   className="text-white text-sm font-medium hover:text-gray-300 transition-colors whitespace-nowrap"
@@ -93,7 +102,7 @@ export default function DynamicIslandNavbar() {
             )}
           </AnimatePresence>
 
-          {/* Join Waitlist Button */}
+          {/* Join Waitlist button block */}
           <motion.button
             layout
             className="bg-white text-black text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 transition-colors whitespace-nowrap ml-4"
