@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import Link from 'next/link';
+import ThemeToggle from './ThemeToggle';
 
 export default function DynamicIslandNavbar() {
   // State to determine if the page has been scrolled
@@ -73,7 +74,7 @@ export default function DynamicIslandNavbar() {
           {/* Main navigation bar with animated padding based on scroll state */}
           <motion.div
             layout
-            className="bg-black rounded-full flex items-center shadow-lg backdrop-blur-sm mx-auto max-w-fit"
+            className="bg-black dark:bg-white rounded-full flex items-center shadow-lg backdrop-blur-sm mx-auto max-w-fit"
             initial={false}
             animate={{
               paddingLeft: isScrolled && !isMobile ? '1.5rem' : '1rem',
@@ -99,8 +100,8 @@ export default function DynamicIslandNavbar() {
               initial={false}
             >
               <Link href="/" className="block">
-                <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-                  <span className="text-black text-xs font-bold">L</span>
+                <div className="w-6 h-6 bg-white dark:bg-black rounded flex items-center justify-center border border-gray-200 dark:border-gray-800">
+                  <span className="text-black dark:text-white text-xs font-bold">L</span>
                 </div>
               </Link>
             </motion.div>
@@ -131,7 +132,7 @@ export default function DynamicIslandNavbar() {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleSmoothScroll(e, link.href)}
-                      className="text-white text-sm font-medium hover:text-gray-300 transition-colors whitespace-nowrap"
+                      className="text-white dark:text-black text-sm font-medium hover:text-gray-300 dark:hover:text-gray-700 transition-colors whitespace-nowrap"
                     >
                       {link.label}
                     </Link>
@@ -144,7 +145,7 @@ export default function DynamicIslandNavbar() {
             {isMobile && (
               <motion.button
                 layout
-                className="ml-4 p-2 text-white hover:text-gray-300 transition-colors"
+                className="ml-4 p-2 text-white dark:text-black hover:text-gray-300 dark:hover:text-gray-700 transition-colors"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Toggle menu"
                 whileHover={{ scale: 1.05 }}
@@ -168,11 +169,22 @@ export default function DynamicIslandNavbar() {
               </motion.button>
             )}
 
+            {/* Theme Toggle - shown when scrolled on desktop or always on mobile (when menu not open) */}
+            {(!isMobile || !isMobileMenuOpen) && (
+              <motion.div
+                layout
+                className="ml-4"
+                initial={false}
+              >
+                <ThemeToggle />
+              </motion.div>
+            )}
+
             {/* Join Waitlist button - hidden on mobile when menu is open, shown on desktop */}
             {(!isMobile || !isMobileMenuOpen) && (
               <motion.button
                 layout
-                className="bg-white text-black text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 transition-colors whitespace-nowrap ml-4"
+                className="bg-white dark:bg-gray-800 text-black dark:text-white text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors whitespace-nowrap ml-2"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -204,18 +216,23 @@ export default function DynamicIslandNavbar() {
               transition={{ duration: 0.2 }}
               className="fixed top-20 left-1/2 -translate-x-1/2 z-40 w-[90vw] max-w-md"
             >
-              <div className="bg-black rounded-2xl shadow-xl backdrop-blur-sm p-2 border border-gray-800">
+              <div className="bg-black dark:bg-white rounded-2xl shadow-xl backdrop-blur-sm p-2 border border-gray-800 dark:border-gray-200">
                 <div className="flex flex-col gap-1">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleSmoothScroll(e, link.href)}
-                      className="text-white text-sm font-medium hover:text-gray-300 transition-colors px-4 py-2.5 rounded-lg hover:bg-gray-900 active:bg-gray-800"
+                      className="text-white dark:text-black text-sm font-medium hover:text-gray-300 dark:hover:text-gray-700 transition-colors px-4 py-2.5 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 active:bg-gray-800 dark:active:bg-gray-200"
                     >
                       {link.label}
                     </Link>
                   ))}
+                  {/* Theme Toggle in Mobile Menu */}
+                  <div className="px-4 py-2.5 flex items-center">
+                    <span className="text-white dark:text-black text-sm font-medium mr-3">Theme</span>
+                    <ThemeToggle />
+                  </div>
                 </div>
               </div>
             </motion.div>
