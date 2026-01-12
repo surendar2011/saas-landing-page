@@ -12,32 +12,37 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Initialize theme from inline script or default to 'light'
-  // The inline script in layout.tsx sets the class before React hydrates
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const hasDarkClass = document.documentElement.classList.contains('dark');
-      const storedTheme = localStorage.getItem('theme') as Theme | null;
-      return storedTheme || (hasDarkClass ? 'dark' : 'light');
-    }
-    return 'light';
-  });
+  const [theme, setTheme] = useState<Theme>('light');
 
+  // Initialize theme on mount
   useEffect(() => {
-    // Sync theme with localStorage and document class on mount
-    const hasDarkClass = document.documentElement.classList.contains('dark');
     const storedTheme = localStorage.getItem('theme') as Theme | null;
+    const hasDarkClass = document.documentElement.classList.contains('dark');
     const initialTheme = storedTheme || (hasDarkClass ? 'dark' : 'light');
     
     setTheme(initialTheme);
-    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+    // Ensure the class is set correctly
+    if (initialTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    setTheme((prevTheme) => {
+      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+      
+      // Update the DOM class
+      if (newTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      
+      return newTheme;
+    });
   };
 
   return (

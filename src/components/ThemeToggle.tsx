@@ -15,7 +15,7 @@ export default function ThemeToggle() {
       whileTap={{ scale: 0.95 }}
     >
       <div className="relative w-5 h-5">
-        {/* Sun Icon - shown in dark mode */}
+        {/* Sun Icon - shown in light mode (click to switch to dark) */}
         <motion.svg
           className="w-5 h-5 text-white dark:text-black absolute inset-0"
           fill="none"
@@ -26,9 +26,9 @@ export default function ThemeToggle() {
           stroke="currentColor"
           initial={false}
           animate={{
-            opacity: theme === 'dark' ? 1 : 0,
-            rotate: theme === 'dark' ? 0 : 90,
-            scale: theme === 'dark' ? 1 : 0,
+            opacity: theme === 'light' ? 1 : 0,
+            rotate: theme === 'light' ? 0 : 90,
+            scale: theme === 'light' ? 1 : 0,
           }}
           transition={{ duration: 0.2 }}
           style={{ pointerEvents: 'none' }}
@@ -44,7 +44,7 @@ export default function ThemeToggle() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </motion.svg>
 
-        {/* Moon Icon - shown in light mode */}
+        {/* Moon Icon - shown in dark mode (click to switch to light) */}
         <motion.svg
           className="w-5 h-5 text-white dark:text-black absolute inset-0"
           fill="none"
@@ -55,9 +55,9 @@ export default function ThemeToggle() {
           stroke="currentColor"
           initial={false}
           animate={{
-            opacity: theme === 'light' ? 1 : 0,
-            rotate: theme === 'light' ? 0 : -90,
-            scale: theme === 'light' ? 1 : 0,
+            opacity: theme === 'dark' ? 1 : 0,
+            rotate: theme === 'dark' ? 0 : -90,
+            scale: theme === 'dark' ? 1 : 0,
           }}
           transition={{ duration: 0.2 }}
           style={{ pointerEvents: 'none' }}
