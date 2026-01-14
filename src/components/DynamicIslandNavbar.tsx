@@ -13,6 +13,8 @@ export default function DynamicIslandNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // State to detect mobile screen size
   const [isMobile, setIsMobile] = useState(false);
+  // State to track hover
+  const [isHovered, setIsHovered] = useState(false);
 
   // Effect hook to listen for scroll events and update isScrolled accordingly
   useEffect(() => {
@@ -76,11 +78,18 @@ export default function DynamicIslandNavbar() {
             layout
             className="bg-black dark:bg-white rounded-full flex items-center shadow-lg backdrop-blur-sm mx-auto max-w-fit"
             initial={false}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             animate={{
-              paddingLeft: isScrolled && !isMobile ? '1.5rem' : '1rem',
-              paddingRight: isScrolled && !isMobile ? '1.5rem' : '1rem',
-              paddingTop: '0.625rem',
-              paddingBottom: '0.625rem',
+              paddingLeft: isHovered 
+                ? (isScrolled && !isMobile ? '2rem' : '1.5rem')
+                : (isScrolled && !isMobile ? '1.5rem' : '1rem'),
+              paddingRight: isHovered 
+                ? (isScrolled && !isMobile ? '2rem' : '1.5rem')
+                : (isScrolled && !isMobile ? '1.5rem' : '1rem'),
+              paddingTop: isHovered ? '0.875rem' : '0.625rem',
+              paddingBottom: isHovered ? '0.875rem' : '0.625rem',
+              scale: isHovered ? 1.05 : 1,
             }}
             transition={{
               layout: {
@@ -88,7 +97,7 @@ export default function DynamicIslandNavbar() {
                 ease: [0.4, 0, 0.2, 1],
               },
               default: {
-                duration: 0.4,
+                duration: 0.3,
                 ease: [0.4, 0, 0.2, 1],
               },
             }}
@@ -106,9 +115,9 @@ export default function DynamicIslandNavbar() {
               </Link>
             </motion.div>
 
-            {/* Desktop Navigation Links - shown only when scrolled and on desktop */}
+            {/* Desktop Navigation Links - shown on hover or when scrolled, on desktop only */}
             <AnimatePresence mode="popLayout">
-              {isScrolled && !isMobile && (
+              {(isHovered || isScrolled) && !isMobile && (
                 <motion.div
                   key="nav-links"
                   layout
